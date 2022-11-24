@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+
+<h1>Welcome to the home page</h1>
+
+<form action="/home" method="post">
+    <input id ="name" placeholder="Your name" type="text" name="name"></input>
+    <button type="submit">Submit</button>
+</form>
+
+{% endblock %}
+
