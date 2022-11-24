@@ -11,7 +11,7 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 
 
-
+#testing new branch creation
 currentdirectory = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/daned/OneDrive/Documents/Coding Project/database.db'
