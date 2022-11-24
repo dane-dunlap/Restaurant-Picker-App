@@ -12,6 +12,8 @@ from wtforms.validators import InputRequired, Length, ValidationError
 
 
 #testing new branch creation
+#testing jira branch integration
+
 currentdirectory = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/daned/OneDrive/Documents/Coding Project/database.db'
