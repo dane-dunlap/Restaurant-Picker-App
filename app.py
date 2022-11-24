@@ -14,24 +14,25 @@ from wtforms.validators import InputRequired, Length, ValidationError
 #testing new branch creation
 #testing jira branch integration
 
-currentdirectory = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/daned/OneDrive/Documents/Coding Project/database.db'
-db = SQLAlchemy(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database2.db'
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.config['SECRET_KEY'] = 'thisisasecretkey'
+db = SQLAlchemy(app)
 Session(app)
 
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = "login"
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    return Users.query.get(int(user_id))
+#login_manager = LoginManager()
+#login_manager.init_app(app)
+#login_manager.login_view = "login"
+
+
+#@login_manager.user_loader
+#def load_user(user_id):
+    #return Users.query.get(int(user_id))
 
 
 class Users(db.Model, UserMixin):
@@ -39,10 +40,13 @@ class Users(db.Model, UserMixin):
     username = db.Column(db.String(20), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
 
+    def __init__(self,username,password):
+        self.username = username
+        self.password = password
 
 class RegisterForm(FlaskForm):
     username = StringField(validators=[InputRequired(),Length(min=4,max=20)],render_kw={"placeholder": "Email"})
-    password = StringField(validators=[InputRequired(),Length(min=4,max=20)],render_kw={"placeholder": "Password"})
+    password = PasswordField(validators=[InputRequired(),Length(min=4,max=20)],render_kw={"placeholder": "Password"})
     submit = SubmitField("Register")
 
     def validate_username(self,username):
@@ -61,13 +65,11 @@ def index():
 def register():
     
     form = RegisterForm()
-    #connection = sqlite3.connect(currentdirectory + "\data.db")
-    #cursor = connection.cursor()
-
     if form.validate_on_submit():
         hashed_password = generate_password_hash(form.password.data, method='pbkdf2:sha256', salt_length=8)
-        #cursor.execute("INSERT INTO users(username,hash) VALUES(?,?)",(form.username.data, hashed_password,))
-        #connection.commit()
+        new_user = Users(username=form.username.data,password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
         return redirect("/home")
     
     return render_template("register.html",form=form)
@@ -96,6 +98,4 @@ def login_required(f):
 
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-    app.run()
+    app.run(debug=True)
