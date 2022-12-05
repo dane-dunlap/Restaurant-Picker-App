@@ -1,3 +1,19 @@
 p{
     font-weight:bold;
 }
+
+.login,
+.image {
+    min-height: 100vh;
+  }
+  
+  .bg-image {
+    background-image: url(Login\ Page.png);
+    background-size: cover;
+    background-position: center center;
+    height:960px;
+  }
+
+
+
+
